@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Приложение ASP.NET Razor Pages</title>
+</head>
+<body>
+    <header>
+        <h2>Каталог товаров (ASP.NET Razor Pages)</h2>
+        <nav>
+            <a asp-page="/Index">Главная (Список)</a> |
+            <a asp-page="/Products/Create">Добавить товар</a> |
+            <a asp-page="/ApiTester">Тестер API</a> |
+            <a asp-page="/About">О проекте</a>
+        </nav>
+        <hr />
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer>
+        <hr />
+        <p><small>&copy; 2026 - ASP.NET Core Razor Pages & Web API</small></p>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

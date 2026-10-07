@@ -1,0 +1,129 @@
+@page
+@model RazorPagesApp.Pages.ApiTesterModel
+@{
+    ViewData["Title"] = "Тестирование API";
+}
+
+<h3>Тестирование REST API (JavaScript fetch)</h3>
+<p>Инструмент для проверки разработанных методов API прямо из браузера без сторонних программ.</p>
+
+<fieldset>
+    <legend>1. GET /api/products (Получить список)</legend>
+    <label>Поиск: <input type="text" id="apiSearch" placeholder="название..." /></label>
+    <label>Категория: <input type="text" id="apiCategory" placeholder="категория..." /></label>
+    <button onclick="testGetProducts()">Отправить GET запрос</button>
+</fieldset>
+<br />
+
+<fieldset>
+    <legend>2. GET /api/products/{id} (Получить по ID)</legend>
+    <label>ID товара: <input type="number" id="apiGetId" value="1" style="width:70px;" /></label>
+    <button onclick="testGetById()">Отправить GET запрос</button>
+</fieldset>
+<br />
+
+<fieldset>
+    <legend>3. POST /api/products (Создать товар через JSON)</legend>
+    <textarea id="apiCreateBody" rows="7" cols="60">{
+  "title": "Наушники беспроводные",
+  "description": "С микрофоном и активным шумоподавлением",
+  "price": 4990.00,
+  "category": "Аудио",
+  "isAvailable": true
+}</textarea><br />
+    <button onclick="testCreateProduct()">Отправить POST запрос</button>
+</fieldset>
+<br />
+
+<fieldset>
+    <legend>4. PUT /api/products/{id} (Обновить товар через JSON)</legend>
+    <label>ID для обновления: <input type="number" id="apiPutId" value="1" style="width:70px;" /></label><br />
+    <textarea id="apiUpdateBody" rows="7" cols="60">{
+  "title": "Ноутбук Pro 15 (Обновлен)",
+  "description": "Обновленная комплектация с 32GB RAM",
+  "price": 85000.00,
+  "category": "Электроника",
+  "isAvailable": true
+}</textarea><br />
+    <button onclick="testUpdateProduct()">Отправить PUT запрос</button>
+</fieldset>
+<br />
+
+<fieldset>
+    <legend>5. DELETE /api/products/{id} (Удалить товар по ID)</legend>
+    <label>ID для удаления: <input type="number" id="apiDeleteId" value="3" style="width:70px;" /></label>
+    <button onclick="testDeleteProduct()">Отправить DELETE запрос</button>
+</fieldset>
+<br />
+
+<fieldset>
+    <legend>Ответ сервера:</legend>
+    <p><strong>HTTP Статус:</strong> <span id="apiStatusText">-</span></p>
+    <pre id="apiOutput" style="background:#f4f4f4; padding:10px; border:1px solid #ccc; max-height:300px; overflow:auto;">Здесь будет отображен JSON ответ сервера...</pre>
+</fieldset>
+
+@section Scripts {
+<script>
+    function showResponse(status, text) {
+        document.getElementById("apiStatusText").innerText = "HTTP " + status;
+        const out = document.getElementById("apiOutput");
+        try {
+            const json = JSON.parse(text);
+            out.innerText = JSON.stringify(json, null, 2);
+        } catch {
+            out.innerText = text;
+        }
+    }
+
+    async function testGetProducts() {
+        const search = document.getElementById("apiSearch").value;
+        const category = document.getElementById("apiCategory").value;
+        let url = "/api/products?";
+        if (search) url += "search=" + encodeURIComponent(search) + "&";
+        if (category) url += "category=" + encodeURIComponent(category);
+
+        const res = await fetch(url);
+        const text = await res.text();
+        showResponse(res.status, text);
+    }
+
+    async function testGetById() {
+        const id = document.getElementById("apiGetId").value;
+        const res = await fetch("/api/products/" + id);
+        const text = await res.text();
+        showResponse(res.status, text);
+    }
+
+    async function testCreateProduct() {
+        const body = document.getElementById("apiCreateBody").value;
+        const res = await fetch("/api/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: body
+        });
+        const text = await res.text();
+        showResponse(res.status, text);
+    }
+
+    async function testUpdateProduct() {
+        const id = document.getElementById("apiPutId").value;
+        const body = document.getElementById("apiUpdateBody").value;
+        const res = await fetch("/api/products/" + id, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: body
+        });
+        const text = await res.text();
+        showResponse(res.status, text);
+    }
+
+    async function testDeleteProduct() {
+        const id = document.getElementById("apiDeleteId").value;
+        const res = await fetch("/api/products/" + id, {
+            method: "DELETE"
+        });
+        const text = await res.text();
+        showResponse(res.status, text);
+    }
+</script>
+}

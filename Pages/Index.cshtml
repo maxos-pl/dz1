@@ -1,0 +1,82 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Список товаров";
+}
+
+<h3>Список товаров</h3>
+
+<!-- Поиск и фильтрация (обработка GET параметров) -->
+<form method="get">
+    <fieldset>
+        <legend>Поиск и фильтрация</legend>
+        <p>
+            <label for="search">Поиск по названию/описанию: </label>
+            <input type="text" id="search" name="SearchString" value="@Model.SearchString" />
+
+            <label for="category">Категория: </label>
+            <select id="category" name="SelectedCategory">
+                <option value="">Все категории</option>
+                @foreach (var cat in Model.Categories)
+                {
+                    <option value="@cat" selected="@(Model.SelectedCategory == cat)">@cat</option>
+                }
+            </select>
+
+            <input type="submit" value="Применить" />
+            <a asp-page="./Index">Сбросить</a>
+        </p>
+    </fieldset>
+</form>
+
+<p>
+    <a asp-page="/Products/Create">[+] Добавить новый товар</a>
+</p>
+
+<!-- Таблица товаров -->
+@if (!Model.Products.Any())
+{
+    <p><em>Товары не найдены.</em></p>
+}
+else
+{
+    <table border="1" cellpadding="6" cellspacing="0">
+        <thead>
+            <tr bgcolor="#f0f0f0">
+                <th>ID</th>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Цена (руб.)</th>
+                <th>Наличие</th>
+                <th>Дата создания</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Products)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>
+                        <a asp-page="/Products/Details" asp-route-id="@item.Id">@item.Title</a>
+                        @if (!string.IsNullOrEmpty(item.Description))
+                        {
+                            <div><small>@item.Description</small></div>
+                        }
+                    </td>
+                    <td>@item.Category</td>
+                    <td>@item.Price.ToString("N2")</td>
+                    <td>@(item.IsAvailable ? "Да" : "Нет")</td>
+                    <td>@item.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        <a asp-page="/Products/Details" asp-route-id="@item.Id">Просмотр</a> |
+                        <a asp-page="/Products/Edit" asp-route-id="@item.Id">Редактировать</a> |
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" style="display:inline;" onsubmit="return confirm('Удалить товар?');">
+                            <input type="submit" value="Удалить" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

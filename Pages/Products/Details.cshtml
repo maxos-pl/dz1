@@ -1,0 +1,19 @@
+@page "{id:int}"
+@model RazorPagesApp.Pages.Products.DetailsModel
+@{
+    ViewData["Title"] = $"Товар: {Model.Product.Title}";
+}
+
+<h3>Информация о товаре #@Model.Product.Id</h3>
+
+<p><strong>Название:</strong> @Model.Product.Title</p>
+<p><strong>Категория:</strong> @Model.Product.Category</p>
+<p><strong>Цена:</strong> @Model.Product.Price.ToString("N2") руб.</p>
+<p><strong>Описание:</strong> @(string.IsNullOrEmpty(Model.Product.Description) ? "нет описания" : Model.Product.Description)</p>
+<p><strong>В наличии:</strong> @(Model.Product.IsAvailable ? "Да" : "Нет")</p>
+<p><strong>Дата добавления:</strong> @Model.Product.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+
+<p>
+    <a asp-page="/Index">← Назад к списку</a> |
+    <a asp-page="/Products/Edit" asp-route-id="@Model.Product.Id">Редактировать</a>
+</p>

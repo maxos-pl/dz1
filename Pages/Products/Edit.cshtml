@@ -1,0 +1,48 @@
+@page "{id:int}"
+@model RazorPagesApp.Pages.Products.EditModel
+@{
+    ViewData["Title"] = "Редактировать товар";
+}
+
+<h3>Редактирование товара #@Model.Product.Id</h3>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" style="color:red;"></div>
+    <input type="hidden" asp-for="Product.Id" />
+
+    <p>
+        <label asp-for="Product.Title"></label><br />
+        <input asp-for="Product.Title" style="width:300px;" /><br />
+        <span asp-validation-for="Product.Title" style="color:red;"></span>
+    </p>
+
+    <p>
+        <label asp-for="Product.Category"></label><br />
+        <input asp-for="Product.Category" style="width:300px;" /><br />
+        <span asp-validation-for="Product.Category" style="color:red;"></span>
+    </p>
+
+    <p>
+        <label asp-for="Product.Price"></label><br />
+        <input asp-for="Product.Price" type="number" step="0.01" style="width:150px;" /><br />
+        <span asp-validation-for="Product.Price" style="color:red;"></span>
+    </p>
+
+    <p>
+        <label asp-for="Product.Description"></label><br />
+        <textarea asp-for="Product.Description" rows="4" cols="40"></textarea><br />
+        <span asp-validation-for="Product.Description" style="color:red;"></span>
+    </p>
+
+    <p>
+        <label>
+            <input type="checkbox" asp-for="Product.IsAvailable" />
+            В наличии
+        </label>
+    </p>
+
+    <p>
+        <input type="submit" value="Сохранить изменения" />
+        <a asp-page="/Index">Назад к списку</a>
+    </p>
+</form>

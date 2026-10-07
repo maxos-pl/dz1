@@ -1,0 +1,63 @@
+@page
+@model RazorPagesApp.Pages.AboutModel
+@{
+    ViewData["Title"] = "О проекте";
+}
+
+<h3>О проекте</h3>
+<p>Веб-приложение на ASP.NET Core Razor Pages с БД SQLite и REST API.</p>
+
+<h4>1. Веб-страницы (Razor Pages)</h4>
+<ul>
+    <li><a asp-page="/Index">Главная (/Index)</a> — вывод списка, поиск, фильтрация и удаление (OnPostDeleteAsync).</li>
+    <li><a asp-page="/Products/Create">Добавление (/Products/Create)</a> — создание нового товара (OnPostAsync).</li>
+    <li>Редактирование (/Products/Edit/{id}) — изменение товара с маршрутом @@page "{id:int}".</li>
+    <li>Детали (/Products/Details/{id}) — просмотр данных о товаре.</li>
+    <li><a asp-page="/ApiTester">Тестер API (/ApiTester)</a> — вызов API из браузера через JavaScript fetch().</li>
+</ul>
+
+<h4>2. База данных</h4>
+<p>Хранение данных реализовано через <strong>Entity Framework Core 8</strong> и <strong>SQLite</strong> (файл <code>products.db</code>).</p>
+
+<h4>3. Разработанный REST API</h4>
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr bgcolor="#f0f0f0">
+            <th>Метод</th>
+            <th>URL эндпоинта</th>
+            <th>Описание</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>GET</td>
+            <td>/api/products</td>
+            <td>Список всех товаров (фильтрация ?search=...&category=...)</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/products/{id}</td>
+            <td>Получение товара по ID</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/api/products/categories</td>
+            <td>Список категорий</td>
+        </tr>
+        <tr>
+            <td>POST</td>
+            <td>/api/products</td>
+            <td>Создание товара (принимает JSON)</td>
+        </tr>
+        <tr>
+            <td>PUT</td>
+            <td>/api/products/{id}</td>
+            <td>Обновление товара (принимает JSON)</td>
+        </tr>
+        <tr>
+            <td>DELETE</td>
+            <td>/api/products/{id}</td>
+            <td>Удаление товара по ID</td>
+        </tr>
+    </tbody>
+</table>
